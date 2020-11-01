@@ -880,8 +880,9 @@ static int audiofork_exec(struct ast_channel *chan, const char *data)
       certdata = S_OR(opts[OPT_ARG_TLS], "");
       ast_verb(2, "Parsing TLS config %s\n",
            certdata);
-
-      char* pt = strtok_r (certdata,",");
+      
+      char *lasts;
+      char* pt = strtok_r (certdata,",", &lasts);
       int pos = 0;
       while (pt != NULL) {
 	if ( pos == 0 ) {
@@ -895,7 +896,7 @@ static int audiofork_exec(struct ast_channel *chan, const char *data)
 	} else if ( pos == 4 ) {
 		tcpath = ast_strdup( pt );
 	}
-        pt = strtok_r (NULL, ",");
+        pt = strtok_r (NULL, ",", &lasts);
 	pos = pos + 1;
       }
       ast_verb(2, "Parsing TLS result tcert: %s, tcpvt: %s, tcipher: %s, tca: %s, tcpath: %s\n",
